@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Martin -->
     <item name="form_cp_approximate_age_type" type="id">approximateAgeType</item>
     <item name="form_cp_address" type="id">personAddress</item>
+    <!-- /Martin -->
+
+
+
+    <item type="id" name="entryListener"/>
+    <item type="id" name="tagViewEntryListener"/>
 </resources>

@@ -18,6 +18,14 @@
             app:showAsAction="always|withText"/>
     </group>
 
+    <group android:id="@+id/group_action_sync">
+        <item
+            android:id="@+id/option_menu_action_sync"
+            android:icon="@drawable/ic_sync_option_menu_24dp"
+            android:title="@string/action_sync"
+            app:showAsAction="always"/>
+    </group>
+
     <item
         android:id="@+id/action_options"
         android:icon="@drawable/ic_more_vert_black_24dp"

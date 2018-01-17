@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="AppTheme.Base"/>
-
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Base SORMAS application theme. -->
+    <style name="SormasTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/green</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowSoftInputMode">stateHidden</item>
+        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="actionBarSize">@dimen/actionBarSize</item>
+
+        <item name="colorControlActivated">@color/textSelectionHandle</item>
+
+        <!--<item name="android:textSelectHandle">@android:drawable/edit_text</item>
+        <item name="android:textSelectHandleLeft">@android:drawable/text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@android:drawable/text_select_handle_right</item>-->
     </style>
+
+    <style name="LoginActivityTheme" parent="SormasTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SettingActivityTheme" parent="SormasTheme">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="actionMenuTextColor">@color/blue</item>
+        <item name="actionMenuTextAppearance">@style/SormasActionBarMenuTextAppearance</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionButtonStyle">@style/ActionButton</item>
+    </style>
+
+    <style name="EnterPinActivityTheme" parent="SormasTheme">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="actionMenuTextColor">@color/blue</item>
+        <item name="actionMenuTextAppearance">@style/SormasActionBarMenuTextAppearance</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionButtonStyle">@style/ActionButton</item>
+    </style>
+
+    <style name="DashboardActivityTheme" parent="SormasTheme">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="actionMenuTextColor">@color/blue</item>
+        <item name="actionMenuTextAppearance">@style/SormasActionBarMenuTextAppearance</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:actionButtonStyle">@style/ActionButton</item>
+    </style>
+
+
 </resources>

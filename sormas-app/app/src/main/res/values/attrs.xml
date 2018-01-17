@@ -4,4 +4,176 @@
         <attr name="show_caption" format="boolean" />
     </declare-styleable>
 
+    <attr name="data" format="string" />
+    <attr name="dataFile" format="string" />
+    <attr name="title" format="string" />
+    <attr name="text" format="string" />
+    <attr name="cellLayout" format="reference" />
+    <attr name="positionColor" format="reference" />
+    <attr name="positionActiveColor" format="reference" />
+    <attr name="titleColor" format="reference" />
+    <attr name="titleActiveColor" format="reference" />
+    <attr name="singleLine" format="boolean"/>
+    <attr name="maxLines" format="integer"/>
+    <attr name="image" format="reference"/>
+    <attr name="imageColor" format="reference"/>
+    <attr name="imageWidth" format="integer"/>
+    <attr name="imageHeight" format="integer"/>
+
+
+    <attr name="value" format="string" />
+    <attr name="valueFormat" format="reference" />
+    <attr name="labelCaption" format="string" />
+    <attr name="labelColor" format="color|reference"/>
+    <attr name="hint" format="string" />
+    <attr name="description" format="string" />
+    <attr name="required" format="boolean" />
+    <attr name="defaultValue" format="string" />
+
+    <attr name="gravity">
+        <flag name="bottom" value="80" />
+        <flag name="center" value="17" />
+        <flag name="center_horizontal" value="1" />
+        <flag name="center_vertical" value="16" />
+        <flag name="clip_horizontal" value="8" />
+        <flag name="clip_vertical" value="128" />
+        <flag name="end" value="8388613" />
+        <flag name="fill" value="119" />
+        <flag name="fill_horizontal" value="7" />
+        <flag name="fill_vertical" value="112" />
+        <flag name="left" value="3" />
+        <flag name="right" value="5" />
+        <flag name="start" value="8388611" />
+        <flag name="top" value="48" />
+    </attr>
+
+    <attr name="textAlignment" format="integer">
+        <enum name="inherit" value="0" />
+        <enum name="gravity" value="1" />
+        <enum name="textStart" value="2" />
+        <enum name="textEnd" value="3" />
+        <enum name="center" value="4" />
+        <enum name="viewStart" value="5" />
+        <enum name="viewEnd" value="6" />
+    </attr>
+
+    <attr name="button_type" format="enum">
+        <enum name="primary" value="0"/>
+        <enum name="secondary" value="1"/>
+    </attr>
+
+    <declare-styleable name="TextControl">
+        <attr name="labelCaption" />
+        <attr name="labelColor" />
+        <attr name="textAlignment" />
+        <attr name="gravity" />
+        <attr name="hint" />
+        <attr name="description" />
+        <attr name="required" />
+    </declare-styleable>
+
+    <declare-styleable name="TextReadControl">
+        <attr name="labelCaption" />
+        <attr name="labelColor" />
+        <attr name="textAlignment" />
+        <attr name="gravity" />
+        <attr name="description" />
+        <attr name="singleLine" />
+        <attr name="maxLines" />
+    </declare-styleable>
+
+    <declare-styleable name="TextImageReadControl">
+        <attr name="labelCaption" />
+        <attr name="labelColor" />
+        <attr name="textAlignment" />
+        <attr name="gravity" />
+        <attr name="description" />
+        <attr name="image" />
+        <attr name="imageColor" />
+        <attr name="imageWidth" />
+        <attr name="imageHeight" />
+    </declare-styleable>
+
+
+    <declare-styleable name="PrimaryButtonControl">
+        <attr name="android:text" />
+        <attr name="button_type" />
+    </declare-styleable>
+
+    <declare-styleable name="ButtonControl">
+        <attr name="android:text" />
+        <attr name="button_type" />
+    </declare-styleable>
+
+    <declare-styleable name="LandingPageMenuControl">
+        <attr name="dataFile" />
+        <attr name="cellLayout" />
+        <attr name="positionColor" />
+        <attr name="positionActiveColor" />
+        <attr name="titleColor" />
+        <attr name="titleActiveColor" />
+    </declare-styleable>
+
+    <declare-styleable name="LandingPageSummaryControl">
+        <attr name="data"/>
+    </declare-styleable>
+
+    <!-- default style for theme -->
+    <attr name="ttlm_defaultStyle" format="reference" />
+
+    <!-- default style -->
+    <declare-styleable name="TooltipLayout">
+        <attr name="ttlm_padding" format="dimension" />
+        <attr name="ttlm_strokeColor" format="color" />
+        <attr name="ttlm_backgroundColor" format="color" />
+        <attr name="ttlm_strokeWeight" format="dimension" />
+        <attr name="ttlm_cornerRadius" format="dimension" />
+        <attr name="ttlm_arrowRatio" format="float" />
+        <attr name="android:textAppearance" />
+        <attr name="android:gravity" />
+        <attr name="ttlm_overlayStyle" format="reference" />
+        <attr name="ttlm_font" format="string" />
+
+        <!-- elevation of the tooltip. Works only on non custom views -->
+        <attr name="ttlm_elevation" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TooltipOverlay">
+        <attr name="android:color" />
+        <attr name="android:alpha" />
+        <attr name="ttlm_repeatCount" format="integer" />
+        <attr name="ttlm_duration" format="integer" />
+        <attr name="android:layout_margin" />
+    </declare-styleable>
+
+    <declare-styleable name="TagView">
+        <attr name="lineMargin" format="dimension" />
+        <attr name="tagMargin" format="dimension" />
+        <attr name="textPaddingLeft" format="dimension" />
+        <attr name="textPaddingRight" format="dimension" />
+        <attr name="textPaddingTop" format="dimension" />
+        <attr name="textPaddingBottom" format="dimension" />
+
+
+        <attr name="textSize" format="dimension|reference" />
+        <attr name="layoutBorderSize" format="dimension|reference" />
+        <attr name="layoutColor" format="reference" />
+        <attr name="layoutColorPress" format="reference" />
+        <attr name="textColor" format="reference" />
+        <attr name="deleteIndicatorColor" format="reference" />
+        <attr name="layoutBorderColor" format="reference" />
+        <attr name="deletable" format="reference" />
+        <attr name="rowLayout" format="reference" />
+
+        <attr name="radius" format="dimension|reference" />
+        <attr name="deleteIndicatorSize" format="dimension|reference" />
+        <attr name="deleteIcon" format="string|reference" />
+        <attr name="background" format="reference" />
+        <attr name="description" />
+        <attr name="labelCaption" />
+        <attr name="labelColor" />
+        <attr name="textAlignment" />
+        <attr name="gravity" />
+    </declare-styleable>
+
 </resources>

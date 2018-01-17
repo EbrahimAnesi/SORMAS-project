@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary"> #03a9f4</color>
-    <color name="colorPrimaryDark">#01579b</color>
+    <!--<color name="colorPrimary"> #03a9f4</color>
+    <color name="colorPrimaryDark">#01579b</color>-->
+
+
+    <!-- Martin -->
     <color name="colorLightGrey">#11000000</color>
     <color name="colorLightGrey2">#6d8ea0</color>
     <color name="colorLightTeal">#4DB6AC</color>
@@ -16,4 +19,369 @@
     <color name="textColorRed">#e61610</color>
 
     <color name="bgColorUnread">#DCEAF4</color>
+    <!-- /Martin -->
+
+
+
+
+
+
+
+    <color name="colorPrimary">#FF005a9c</color>
+    <color name="colorPrimaryDark">#FF005a9c</color>
+    <color name="colorAccent">#ff6691c4</color>
+
+    <!-- Remove when done -->
+    <color name="red">#FFe10002</color>
+    <color name="purple">#c600ff</color>
+
+    <color name="green">#ff15AB89</color>
+    <color name="gray">#ff878a8d</color>
+    <color name="orange">#fff99135</color>
+    <color name="noColor">@color/transparent</color>
+    <color name="blue">#FF005a9c</color>
+    <color name="lightBlue">#ff6691c4</color>
+    <color name="lightBlue80">#CC6691c4</color>
+    <color name="lightBlue50">#806691c4</color>
+    <color name="lighterBlue">#ffcdd8ec</color>
+    <color name="lighterBlue40">#66cdd8ec</color>
+    <color name="normalText">#FF374b5a</color>
+    <color name="normalText30">#4D374b5a</color>
+    <color name="normalText44">#70374b5a</color>
+    <color name="normalText50">#80374b5a</color>
+    <color name="normalText70">#B3374b5a</color>
+    <color name="normalText80">#CC374b5a</color>
+    <color name="textDisabled">@color/normalText50</color>
+    <color name="whiteOpaque">#FFFFFFFF</color>
+    <color name="whiteTransparent">#00FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="brightBlue">#ff46c8e5</color>
+    <color name="brightYellow">#fff7de7c</color>
+
+    <color name="listItemPressed">#fff3f6fa</color>
+
+    <color name="goodJob">@color/green</color>
+    <color name="watchOut">@color/red</color>
+
+    <color name="lightestBlue">#ffe1e7f0</color>
+    <color name="lightestBlue50">#80e1e7f0</color>
+
+
+    <color name="ic_launcher_background">#FFFFFF</color>
+
+    <color name="formListSectionBackground">@color/lightestBlue50</color>
+    <color name="activityBackground">@color/whiteOpaque</color>
+
+    <color name="primaryButtonText">#FFFFFF</color>
+    <color name="primaryButton">@color/blue</color>
+    <color name="primaryButtonPressed">@color/lightBlue</color>
+    <color name="primaryButtonFocused">@color/lightBlue</color>
+
+    <color name="secondaryButtonText">#FFFFFF</color>
+    <color name="secondaryButton">@color/lightBlue</color>
+    <color name="secondaryButtonPressed">@color/lightBlue80</color>
+    <color name="secondaryButtonFocused">@color/lightBlue80</color>
+    <color name="secondaryButtonPressedText">@color/blue</color>
+    <color name="secondaryButtonFocusedText">@color/blue</color>
+
+
+    <color name="toolbarActionButton">@color/whiteTransparent</color>
+    <color name="toolbarActionButtonPressed">#CCcdd8ec</color>
+    <color name="toolbarActionButtonFocused">#CCcdd8ec</color>
+
+
+
+
+    <color name="textSelectionHandle">@color/blue</color>
+    <color name="controlTextColor">@color/normalText</color>
+    <color name="controlLabelColor">@color/normalText</color>
+    <color name="controlTextViewStroke">@color/lighterBlue</color>
+    <color name="controlTextViewBackground">#00FFFFFF</color>
+    <color name="controlTextViewHint">@color/lighterBlue</color>
+
+
+
+
+
+    <color name="labelFocus">#005a9c</color>
+
+
+    <color name="fab">@color/lightestBlue50</color>
+    <color name="fabIcon">@color/blue</color>
+
+    <!-- Read Text Control -->
+    <color name="controlReadTextColor">@color/normalText</color>
+    <color name="controlReadLabelColor">@color/lightBlue</color>
+    <color name="controlReadLabelSecodaryColor">@color/normalText70</color>
+    <color name="controlReadTextViewStroke">@android:color/transparent</color>
+    <color name="controlReadTextViewBackground">#00FFFFFF</color>
+    <color name="controlReadTextViewHint">@color/lighterBlue</color>
+
+
+
+
+
+    <color name="windowBackground">@color/whiteOpaque</color>
+
+
+
+
+    <color name="unreadIcon">@color/lightBlue</color>
+
+
+
+    <!-- Action Bar -->
+    <color name="actionBarBackgroundColor">@color/whiteOpaque</color>
+    <color name="toolbarTextColor">#FF005a9c</color>
+    <color name="toolbarTitle">#FF005a9c</color>
+
+    <color name="popupBackground">@color/whiteOpaque</color>
+    <color name="popupMenuListDivider">@color/lighterBlue40</color>
+    <color name="popupMenuListText">@color/normalText</color>
+
+
+    <!-- Drawer -->
+    <color name="drawerBackground">@color/lightBlue</color>
+    <color name="drawerText">@color/whiteOpaque</color>
+    <color name="drawerIcon">@color/lighterBlue</color>
+    <color name="drawerHeaderBackground">@color/lighterBlue</color>
+    <color name="drawerHeaderBottomBorder">@color/blue</color>
+    <color name="drawerHeaderText">@color/normalText</color>
+    <color name="drawerBottomControlBorder">@color/lighterBlue</color>
+    <color name="drawerBottomControlBackground">@android:color/transparent</color>
+    <color name="drawerMenuItemChangeState">@color/blue</color>
+    <color name="drawerBottomControlFocused">@color/drawerMenuItemChangeState</color>
+    <color name="drawerBottomControlPressed">@color/drawerMenuItemChangeState</color>
+    <color name="drawerNotificationCounterBackground">@color/lighterBlue</color>
+    <color name="drawerNotificationCounterBorder">@color/lighterBlue</color>
+    <color name="drawerNotificationCounterText">@color/normalText</color>
+    <color name="drawerTaskNotificationCounter">@color/watchOut</color>
+    <color name="drawerTaskNotificationCounterText">@color/whiteOpaque</color>
+
+
+    <!-- Login Activity -->
+    <color name="text_70">#B3374b5a</color>
+    <color name="text_30">#4D374b5a</color>
+
+
+    <!-- PIN Heading -->
+    <color name="pinHeading1">@color/lightBlue</color>
+    <color name="pinMask">@color/blue</color>
+    <color name="pinButton">@color/whiteOpaque</color>
+    <color name="pinButtonFocused">@color/lighterBlue40</color>
+    <color name="pinButtonPressed">@color/lighterBlue40</color>
+    <color name="textPinButton">@color/normalText</color>
+    <color name="textPinButtonDisabled">@color/text_30</color>
+    <color name="textPinButtonFocused">@color/blue</color>
+    <color name="textPinButtonPressed">@color/blue</color>
+
+
+
+    <!-- Tool Tip outside_color_trans-->
+    <color name="tooltip_background_default">@color/lighterBlue</color>
+    <color name="tooltip_overlay_background_default">@color/whiteTransparent</color>
+    <color name="tooltip_text_default">@color/lighterBlue</color>
+
+
+
+    <!-- Landing Page -->
+    <color name="landingMenuCellBackground">@color/whiteOpaque</color>
+    <color name="landingMenuCellPressedBackground">@color/listItemPressed</color>
+    <color name="landingMenuCellFocusedBackground">@color/listItemPressed</color>
+    <color name="landingMenuCellSelectedBackground">@color/listItemPressed</color>
+    <color name="landingMenuTitleBackground">@color/whiteOpaque</color>
+    <color name="landingMenuTitleBorder">@color/lighterBlue</color>
+    <color name="landingPageMenuText">@color/normalText</color>
+    <color name="landingPageMenuCounterText">@color/whiteOpaque</color>
+    <color name="landingPageMenuCounterBackground">@color/lightBlue</color>
+    <color name="landingPageSummaryDivider">#ffcad8e7</color>
+
+
+
+    <!-- Page Menu -->
+    <color name="pageMenuPositionColor">@color/normalText30</color>
+    <color name="pageMenuPositionActiveColor">@color/blue</color>
+    <color name="pageMenuTitleColor">@color/normalText</color>
+    <color name="pageMenuTitleActiveColor">@color/blue</color>
+
+
+
+
+
+
+
+    <color name="summaryCellBorder">@color/lighterBlue</color>
+    <color name="summaryCellBackground">@color/lightestBlue</color>
+
+    <!-- Circular Progress -->
+    <color name="circularProgressUnfinishedDefault">@color/lightestBlue50</color>
+    <color name="circularProgressFinishedDefault">@color/blue</color>
+
+    <color name="circularProgressUnfinishedWatchOut">#ffe1cfd8</color>
+    <color name="circularProgressFinishedWatchOut">@color/red</color>
+
+    <color name="circularProgressUnfinishedSuccess">#ffd7e3e4</color>
+    <color name="circularProgressFinishedSuccess">#ff7bc27b</color>
+
+    <color name="circularProgressUnfinishedWarning">#ffe4e2e1</color>
+    <color name="circularProgressFinishedWarning">#fffcbb6b</color>
+
+    <color name="circularProgressUnfinishedNeutral">#ffd0d7e1</color>
+    <color name="circularProgressFinishedNeutral">#ff374b5a</color>
+
+
+
+    <!-- Task Pie Chart -->
+    <color name="normalPriority">#fff5d65b</color>
+    <color name="lowPriority">#ff18bade</color>
+    <color name="highPriority">#ffe10002</color>
+
+
+
+    <!-- Task Priority -->
+    <color name="legendValuePercentageSpacer">#ffa7c3e4</color>
+
+
+    <!-- Landing Page Icons -->
+    <color name="landingPageMenuIcon">@color/lightBlue50</color>
+
+
+    <!-- List Layoutrs -->
+    <color name="goToReadViewFromListIcon">@color/lighterBlue</color>
+    <color name="syncIconListActivityRowItem">@color/blue</color>
+
+
+
+    <color name="listActivityRowTopCaptionSeparator">@color/normalText50</color>
+
+
+
+
+    <color name="viewSeparator">@color/lightestBlue</color>
+
+
+
+
+    <!-- Activity Sub Heading -->
+    <color name="subHeadingBarBackground">@color/whiteOpaque</color>
+    <color name="subHeadingBarBorder">@color/lightBlue50</color>
+    <color name="activitySubHeadingText">@color/blue</color>
+
+
+    <color name="indicatorTaskPriorityHigh">@color/red</color>
+    <color name="indicatorTaskPriorityLow">@color/brightBlue</color>
+    <color name="indicatorTaskPriorityNormal">@color/brightYellow</color>
+
+    <color name="indicatorTaskPending">@color/orange</color>
+    <color name="indicatorTaskDone">@color/green</color>
+    <color name="indicatorTaskRemoved">@color/watchOut</color>
+    <color name="indicatorTaskNotExecutable">@color/gray</color>
+
+    <color name="indicatorInvestigationPending">@color/orange</color>
+    <color name="indicatorInvestigationDone">@color/green</color>
+    <color name="indicatorInvestigationDiscarded">@color/gray</color>
+
+    <color name="indicatorCaseSuspected">@color/orange</color>
+    <color name="indicatorCaseNotYetClassified">@color/lightBlue50</color>
+    <color name="indicatorCaseProbable">@color/brightYellow</color>
+    <color name="indicatorCaseConfirmed">@color/watchOut</color>
+    <color name="indicatorNotACase">@color/gray</color>
+
+    <color name="indicatorPossibleContact">@color/orange</color>
+    <color name="indicatorConfirmedContact">@color/blue</color>
+    <color name="indicatorNoContact">@color/green</color>
+    <color name="indicatorConvertedContact">@color/watchOut</color>
+    <color name="indicatorDroppedContact">@color/lightBlue50</color>
+
+    <color name="indicatorRumorEvent">@color/lightBlue50</color>
+    <color name="indicatorOutbreakEvent">@color/watchOut</color>
+
+    <color name="indicatorPossibleEvent">@color/orange</color>
+    <color name="indicatorConfirmedEvent">@color/watchOut</color>
+    <color name="indicatorNoEvent">@color/gray</color>
+
+    <color name="indicatorContactFollowUp">@color/blue</color>
+    <color name="indicatorContactCompletedFollowUp">@color/green</color>
+    <color name="indicatorContactCanceledFollowUp">@color/lightBlue50</color>
+    <color name="indicatorContactLostFollowUp">@color/orange</color>
+    <color name="indicatorContactNoFollowUp">@color/watchOut</color>
+
+    <color name="indicatorShipmentNotShipped">@color/orange</color>
+    <color name="indicatorShipmentShipped">@color/blue</color>
+    <color name="indicatorShipmentReceived">@color/gray</color>
+    <color name="indicatorShipmentReferred">@color/gray</color>
+
+    <color name="indicatorContactPossible">@color/orange</color>
+    <color name="indicatorContactConfirmed">@color/blue</color>
+    <color name="indicatorContactNoContact">@color/gray</color>
+    <color name="indicatorContactConverted">@color/watchOut</color>
+    <color name="indicatorContactDropped">@color/lightBlue50</color>
+
+    <color name="indicatorVisitUnavailable">@color/lightBlue50</color>
+    <color name="indicatorVisitUncoperative">@color/watchOut</color>
+    <color name="indicatorVisitCooperative">@color/blue</color>
+
+
+    <color name="listActivityRowBackground">@android:color/transparent</color>
+    <color name="listActivityRowBorder">@color/lighterBlue</color>
+    <color name="listActivityRowPressedBackground">@color/listItemPressed</color>
+    <color name="listActivityRowFocusedBackground">@color/listItemPressed</color>
+    <color name="listActivityRowSelectedBackground">@color/listItemPressed</color>
+    <color name="listActivityRowPrimaryText">@color/normalText</color>
+    <color name="listActivityRowSecondaryText">@color/normalText</color>
+    <color name="listActivityRowTertiaryText">@color/blue</color>
+    <color name="listActivityRowStatusText">@color/normalText</color>
+    <color name="listActivityRowDateText">@color/normalText80</color>
+    <color name="listActivityRowLeastText">@color/normalText80</color>
+
+
+
+
+
+    <color name="optionMenuIcon">@color/blue</color>
+
+
+
+    <color name="sectionListRowBackground">@color/whiteOpaque</color>
+    <color name="sectionListRowPressedBackground">@color/listItemPressed</color>
+    <color name="sectionListRowFocusedBackground">@color/listItemPressed</color>
+    <color name="sectionListRowSelectedBackground">@color/listItemPressed</color>
+
+
+    <color name="samplePositive">@color/watchOut</color>
+    <color name="sampleNegative">@color/green</color>
+    <color name="samplePending">@color/orange</color>
+    <color name="sampleIndeterminate">@color/gray</color>
+
+
+    <!-- Link Button -->
+    <color name="linkButtonFocused">@color/blue</color>
+    <color name="linkButtonPressed">@color/blue</color>
+    <color name="linkButtonDisabled">@color/text_30</color>
+    <color name="linkButtonNormal">@color/lightBlue</color>
+
+
+    <!-- Read Activity Link -->
+    <color name="formActivityLinkFocused">@color/lightBlue</color>
+    <color name="formActivityLinkPressed">@color/lightBlue</color>
+    <color name="formActivityLinkDisabled">@color/text_30</color>
+    <color name="formActivityLinkNormal">@color/blue</color>
+    <color name="symptomListRowBackground">@color/normalText</color>
+
+
+
+    <!-- Tag View -->
+    <color name="tagViewLayoutColor">@color/whiteOpaque</color>
+    <color name="tagViewLayoutColorPress">@color/lightestBlue</color>
+    <color name="tagViewTextColor">@color/normalText</color>
+    <color name="tagViewLayoutBorderColor">@color/normalText44</color>
+    <color name="deleteIndicatorColor">@color/watchOut</color>
+
+
+
+
+
+    <color name="readInlineListPrimaryTextColor">@color/normalText</color>
+    <color name="readInlineListTertiaryTextColor">@color/normalText</color>
+    <color name="readInlineListSecondaryTextColor">@color/normalText80</color>
 </resources>
