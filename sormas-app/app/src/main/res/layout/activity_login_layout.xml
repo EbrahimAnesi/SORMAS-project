@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:descendantFocusability="beforeDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_marginStart="@dimen/parentLayoutHorizontalMargin"
+    android:layout_marginEnd="@dimen/parentLayoutHorizontalMargin">
+
+
+
+    <ImageView
+        android:id="@+id/sormas_logo"
+        android:layout_width="@dimen/logoWidth"
+        android:layout_height="@dimen/logoHeight"
+        android:layout_marginTop="@dimen/logoMarginTop"
+        android:layout_marginBottom="@dimen/logoMarginBottom"
+        android:contentDescription="@string/sormas_logo_desc"
+        android:src="@drawable/sormas_logo"/>
+
+    <!-- Surveillance Outbreak -->
+    <TextView
+        android:id="@+id/textview_heading_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_heading_1"
+        style="@style/LoginHeading1" />
+
+    <!-- Response Managment & Analysis System -->
+    <TextView
+        android:id="@+id/textview_heading_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_heading_2"
+        style="@style/LoginHeading2" />
+
+    <!-- Disease Prevention . Disease Detection . Outbreak Response -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/serviceMarginBottom">
+
+        <TextView
+            android:id="@+id/textview_service_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_1"
+            style="@style/LoginServiceText" />
+
+        <View
+            android:id="@+id/service_separator_1"
+            style="@style/LoginServiceSeparator" />
+
+        <TextView
+            android:id="@+id/textview_service_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_2"
+            style="@style/LoginServiceText" />
+
+        <View
+            android:id="@+id/service_separator_2"
+            style="@style/LoginServiceSeparator" />
+
+        <TextView
+            android:id="@+id/textview_service_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_3"
+            style="@style/LoginServiceText" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="@dimen/signinFormWidth"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            style="@style/LoginSignInText" />
+        <TextView
+            android:id="@+id/textview_signin_tagline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/signInTagLineMarginBottom"
+            android:text="@string/sign_in_tagline"
+            android:textColor="@color/text_70" />
+
+        <!---->
+        <TextView
+            android:id="@+id/lblUserName"
+            android:labelFor="@+id/txtUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/username_label_title"
+            style="@style/ControlLabelStyle" />
+
+        <!--android:background="@drawable/textview_border"-->
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+        <EditText
+            android:id="@+id/txtUserName"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/textControlMarginBottom"
+            android:hint="@string/userNameHint"
+            android:inputType="text"
+            android:nextFocusUp="@id/txtUserName"
+            android:nextFocusLeft="@id/txtUserName"
+            android:nextFocusDown="@+id/txtPassword"
+            android:nextFocusRight="@+id/txtPassword"
+            style="@style/EditTextViewSingleRowStyle" />
+
+        <!---->
+        <TextView
+            android:id="@+id/lblPassword"
+            android:labelFor="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password_label_title"
+            style="@style/ControlLabelStyle"
+            />
+
+        <!--android:background="@drawable/textview_border"-->
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/textControlMarginBottom"
+            android:hint="@string/passwordHint"
+            android:inputType="textPassword"
+            android:nextFocusUp="@id/txtUserName"
+            android:nextFocusLeft="@id/txtUserName"
+            android:nextFocusDown="@+id/btnLogin"
+            android:nextFocusRight="@+id/btnLogin"
+            style="@style/EditTextViewSingleRowStyle"
+            />
+
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/buttonControlMarginBottom"
+            android:text="@string/action_login"
+            android:nextFocusUp="@id/txtPassword"
+            android:nextFocusLeft="@id/txtPassword"
+            android:nextFocusDown="@+id/btnChangeSettings"
+            android:nextFocusRight="@+id/btnChangeSettings"
+            style="@style/PrimaryButtonStyle"
+            android:onClick="login"
+            />
+
+        <!---->
+        <TextView
+            android:id="@+id/btnChangeSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_change_settings"
+            android:nextFocusUp="@id/btnLogin"
+            android:nextFocusLeft="@id/btnLogin"
+            style="@style/ChangeSettingStyle"
+            android:onClick="showSettingsView" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/controlTextViewBackground" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <corners android:topRightRadius="@dimen/textViewRadius" android:bottomRightRadius="@dimen/textViewRadius" />
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="@dimen/textViewBorder"
+                android:color="@color/controlTextViewStroke" />
+        </shape>
+    </item>
+</layer-list>
