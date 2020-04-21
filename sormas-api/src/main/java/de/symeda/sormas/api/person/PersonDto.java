@@ -93,6 +93,7 @@ public class PersonDto extends EntityDto {
 	public static final String PASSPORT_NUMBER = "passportNumber";
 	public static final String NATIONAL_HEALTH_ID = "nationalHealthId";
 	public static final String EMAIL_ADDRESS = "emailAddress";
+	public static final String NATIONALITY = "nationality";
 
 	// Fields are declared in the order they should appear in the import template
 
@@ -174,6 +175,7 @@ public class PersonDto extends EntityDto {
 	private String generalPractitionerDetails;
 	private String passportNumber;
 	private String nationalHealthId;
+	private Nationality nationality;
 
 	public Integer getBirthdateDD() {
 		return birthdateDD;

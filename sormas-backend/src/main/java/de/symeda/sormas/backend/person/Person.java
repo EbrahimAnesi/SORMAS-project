@@ -36,6 +36,7 @@ import de.symeda.sormas.api.person.BurialConductor;
 import de.symeda.sormas.api.person.CauseOfDeath;
 import de.symeda.sormas.api.person.DeathPlaceType;
 import de.symeda.sormas.api.person.EducationType;
+import de.symeda.sormas.api.person.Nationality;
 import de.symeda.sormas.api.person.OccupationType;
 import de.symeda.sormas.api.person.PersonDto;
 import de.symeda.sormas.api.person.PresentCondition;
@@ -99,6 +100,7 @@ public class Person extends AbstractDomainObject {
 	public static final String PASSPORT_NUMBER = "passportNumber";
 	public static final String NATIONAL_HEALTH_ID = "nationalHealthId";
 	public static final String EMAIL_ADDRESS = "emailAddress";
+	public static final String NATIONALITY = "nationality";
 	
 	private String firstName;
 	private String lastName;
@@ -153,6 +155,7 @@ public class Person extends AbstractDomainObject {
 	private String generalPractitionerDetails;
 	private String passportNumber;
 	private String nationalHealthId;
+	private Nationality nationality;
 	
 	@Column(nullable = false)
 	public String getFirstName() {
@@ -513,9 +516,17 @@ public class Person extends AbstractDomainObject {
 	public void setNationalHealthId(String nationalHealthId) {
 		this.nationalHealthId = nationalHealthId;
 	}
-	
+
+	@Enumerated(EnumType.STRING)
+	public Nationality getNationality() {
+		return nationality;
+	}
+	public void setNationality(Nationality nationality) {
+		this.nationality = nationality;
+	}
+
 	@Override
 	public String toString() {
 		return PersonDto.buildCaption(firstName, lastName);
-	}	
+	}
 }
