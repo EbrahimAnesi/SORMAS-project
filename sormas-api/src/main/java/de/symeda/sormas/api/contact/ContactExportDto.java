@@ -75,14 +75,13 @@ public class ContactExportDto implements Serializable {
 
 	private QuarantineType quarantine;
 	private Date quarantineFrom;
-	private OrderMeans quarantineOrderMeans;
 	private String quarantineHelpNeeded;
 
 	public ContactExportDto(long id, long personId, String uuid, String sourceCaseUuid, CaseClassification caseClassification, Disease disease, String diseaseDetails,
 			ContactClassification contactClassification, Date lastContactDate, String firstName, String lastName, Sex sex,
 			Integer approximateAge, ApproximateAgeType approximateAgeType, Date reportDate, ContactProximity contactProximity,
 			ContactStatus contactStatus, FollowUpStatus followUpStatus, Date followUpUntil,
-			QuarantineType quarantine, Date quarantineFrom, OrderMeans quarantineOrderMeans, String quarantineHelpNeeded,
+			QuarantineType quarantine, Date quarantineFrom, String quarantineHelpNeeded,
 			PresentCondition presentCondition, Date deathDate,
 			String addressRegion, String addressDistrict, String city, String address, String postalCode,
 			String phone, String phoneOwner, OccupationType occupationType, String occupationDetails,
@@ -107,12 +106,9 @@ public class ContactExportDto implements Serializable {
 		this.contactStatus = contactStatus;
 		this.followUpStatus = followUpStatus;
 		this.followUpUntil = followUpUntil;
-
 		this.quarantine = quarantine;
 		this.quarantineFrom = quarantineFrom;
 		this.quarantineHelpNeeded = quarantineHelpNeeded;
-		this.quarantineOrderMeans = quarantineOrderMeans;
-
 		this.presentCondition = presentCondition;
 		this.deathDate = deathDate;
 		this.addressRegion = addressRegion;
@@ -240,10 +236,6 @@ public class ContactExportDto implements Serializable {
 	@Order(26)
 	public String getQuarantineHelpNeeded() {
 		return quarantineHelpNeeded;
-	}
-	@Order(27)
-	public OrderMeans getQuarantineOrderMeans() {
-		return quarantineOrderMeans;
 	}
 
 	@Order(28)
