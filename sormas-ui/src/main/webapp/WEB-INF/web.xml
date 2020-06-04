@@ -81,4 +81,25 @@
       		<role-name>USER</role-name>
     	</auth-constraint>
 	</security-constraint> -->
+
+	<security-constraint>
+		<display-name>secure all</display-name>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<!-- mapped in glassfish-web.xml -->
+			<role-name>USER</role-name>
+			<role-name>ADMIN</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<display-name>keycloak callback</display-name>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>/callback</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
 </web-app>
