@@ -23,6 +23,7 @@ import de.symeda.sormas.api.utils.DataHelper;
 
 public class CaseJurisdictionHelper {
 
+	// TODO #2309: Replaced by CaseService.createUndisclosedFilter
 	public static Boolean isInJurisdiction(
 		JurisdictionLevel jurisdictionLevel,
 		UserJurisdiction userJurisdiction,

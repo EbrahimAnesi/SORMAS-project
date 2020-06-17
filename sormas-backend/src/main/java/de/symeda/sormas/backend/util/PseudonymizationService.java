@@ -17,10 +17,23 @@
  *******************************************************************************/
 package de.symeda.sormas.backend.util;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import de.symeda.sormas.api.PseudonymizableDto;
+import de.symeda.sormas.api.utils.PersonalData;
+import de.symeda.sormas.api.utils.fieldaccess.FieldAccessCheckers;
+import de.symeda.sormas.api.utils.fieldaccess.checkers.PersonalDataFieldAccessChecker;
 import de.symeda.sormas.backend.user.UserService;
 
 @Stateless
@@ -29,6 +42,44 @@ public class PseudonymizationService {
 
 	@EJB
 	private UserService userService;
+
+	/**
+	 * @param <D>
+	 *            Type of DTOs to pseudonymize.
+	 * @param type
+	 *            Type of DTOs to pseudonymize.
+	 * @param dtos
+	 *            Check each element and clear {@link PersonalData} if the {@code uuid} is not in {@code undisclosedUuidsSupplier}.
+	 * @param uuidGetter
+	 *            uuid of the root element in each DTO.
+	 * @param undisclosedUuidsSupplier
+	 *            Uuids of all elements where {@link PersonalData} is allowed.
+	 * @param customPseudonymization
+	 */
+	public <D> void pseudonymizeDtoCollection(
+		Class<D> type,
+		Collection<D> dtos,
+		Function<D, String> uuidGetter,
+		Supplier<List<String>> undisclosedUuidsSupplier,
+		CustomPseudonymization<D> customPseudonymization) {
+
+		if (dtos.isEmpty()) {
+			// NOOP on empty collection
+			return;
+		}
+
+		List<Field> declaredFields = getDeclaredFields(type);
+
+		List<String> undisclosedUuids = undisclosedUuidsSupplier.get();
+		dtos.forEach(dto -> {
+			Boolean isInJurisdiction = undisclosedUuids.contains(uuidGetter.apply(dto));
+			pseudonymizeDto(
+				dto,
+				declaredFields,
+				isInJurisdiction,
+				customPseudonymization == null ? null : d -> customPseudonymization.pseudonymize(dto, isInJurisdiction));
+		});
+	}
 
 //	public <DTO> void pseudonymizeDtoCollection(
 //		Class<DTO> type,
@@ -48,95 +99,95 @@ public class PseudonymizationService {
 //		});
 //	}
 
-//	public <DTO> void pseudonymizeDto(Class<DTO> type, DTO dto, boolean isInJurisdiction, Consumer<DTO> customPseudonymization) {
-//		List<Field> declaredFields = getDeclaredFields(type);
-//
-//		pseudonymizeDto(dto, declaredFields, isInJurisdiction, customPseudonymization);
-//	}
+	public <DTO> void pseudonymizeDto(Class<DTO> type, DTO dto, boolean isInJurisdiction, Consumer<DTO> customPseudonymization) {
+		List<Field> declaredFields = getDeclaredFields(type);
 
-//	public <DTO extends PseudonymizableDto> void restorePseudonymizedValues(Class<DTO> type, DTO dto, DTO originalDto, boolean isInJurisdiction) {
-//		FieldAccessCheckers accessCheckers = createFieldAccessCheckers(isInJurisdiction);
-//
-//		if (accessCheckers.hasRights() && !dto.isPseudonymized()) {
-//			return;
-//		}
-//
-//		List<Field> declaredFields = getDeclaredFields(type);
-//
-//		declaredFields.forEach(field -> {
-//			if (accessCheckers.isConfiguredForCheck(field)) {
-//				if (!accessCheckers.isAccessible(field) || dto.isPseudonymized()) {
-//					restoreOriginalValue(dto, field, originalDto);
-//				}
-//			}
-//		});
-//	}
+		pseudonymizeDto(dto, declaredFields, isInJurisdiction, customPseudonymization);
+	}
 
-//	private <DTO> void pseudonymizeDto(DTO dto, List<Field> declaredFields, boolean isInJurisdiction, Consumer<DTO> customPseudonymization) {
-//		FieldAccessCheckers accessCheckers = createFieldAccessCheckers(isInJurisdiction);
-//
-//		if (accessCheckers.hasRights()) {
-//			return;
-//		}
-//
-//		declaredFields.forEach(field -> {
-//			if (!accessCheckers.isAccessible(field)) {
-//				pseudonymizeField(dto, field);
-//			}
-//		});
-//
-//		if (PseudonymizableDto.class.isAssignableFrom(dto.getClass())) {
-//			((PseudonymizableDto) dto).setPseudonymized(true);
-//		}
-//
-//		if (customPseudonymization != null) {
-//			customPseudonymization.accept(dto);
-//		}
-//	}
+	public <DTO extends PseudonymizableDto> void restorePseudonymizedValues(Class<DTO> type, DTO dto, DTO originalDto, boolean isInJurisdiction) {
+		FieldAccessCheckers accessCheckers = createFieldAccessCheckers(isInJurisdiction);
 
-//	private FieldAccessCheckers createFieldAccessCheckers(boolean isInJurisdiction) {
-//		return new FieldAccessCheckers().add(new PersonalDataFieldAccessChecker(r -> userService.hasRight(r), isInJurisdiction));
-//	}
+		if (accessCheckers.hasRights() && !dto.isPseudonymized()) {
+			return;
+		}
 
-//	private <DTO> void pseudonymizeField(DTO dto, Field field) {
-//
-//		try {
-//			Object emptyValue = field.getType().equals(String.class) ? "" : null;
-//			field.setAccessible(true);
-//			field.set(dto, emptyValue);
-//		} catch (IllegalAccessException e) {
-//			throw new RuntimeException(e);
-//		} finally {
-//			field.setAccessible(false);
-//		}
-//	}
-//
-//	private <DTO extends PseudonymizableDto> void restoreOriginalValue(DTO dto, Field field, DTO originalDto) {
-//
-//		try {
-//			field.setAccessible(true);
-//			Object originalValue = field.get(originalDto);
-//			field.set(dto, originalValue);
-//		} catch (IllegalAccessException e) {
-//			throw new RuntimeException(e);
-//		} finally {
-//			field.setAccessible(false);
-//		}
-//	}
-//
-//	private List<Field> getDeclaredFields(Class<?> type) {
-//
-//		ArrayList<Field> declaredFields = new ArrayList<>(Arrays.asList(type.getDeclaredFields()));
-//
-//		if (type.getSuperclass() != null) {
-//			declaredFields.addAll(getDeclaredFields(type.getSuperclass()));
-//		}
-//
-//		return declaredFields;
-//	}
-//
-//	public interface CustomPseudonymization<DTO> {
-//
-//		void pseudonymize(DTO dto, boolean isInJurisdiction);
-//	}
+		List<Field> declaredFields = getDeclaredFields(type);
+
+		declaredFields.forEach(field -> {
+			if (accessCheckers.isConfiguredForCheck(field)) {
+				if (!accessCheckers.isAccessible(field) || dto.isPseudonymized()) {
+					restoreOriginalValue(dto, field, originalDto);
+				}
+			}
+		});
+	}
+
+	private <DTO> void pseudonymizeDto(DTO dto, List<Field> declaredFields, boolean isInJurisdiction, Consumer<DTO> customPseudonymization) {
+		FieldAccessCheckers accessCheckers = createFieldAccessCheckers(isInJurisdiction);
+
+		if (accessCheckers.hasRights()) {
+			return;
+		}
+
+		declaredFields.forEach(field -> {
+			if (!accessCheckers.isAccessible(field)) {
+				pseudonymizeField(dto, field);
+			}
+		});
+
+		if (PseudonymizableDto.class.isAssignableFrom(dto.getClass())) {
+			((PseudonymizableDto) dto).setPseudonymized(true);
+		}
+
+		if (customPseudonymization != null) {
+			customPseudonymization.accept(dto);
+		}
+	}
+
+	private FieldAccessCheckers createFieldAccessCheckers(boolean isInJurisdiction) {
+		return new FieldAccessCheckers().add(new PersonalDataFieldAccessChecker(r -> userService.hasRight(r), isInJurisdiction));
+	}
+
+	private <DTO> void pseudonymizeField(DTO dto, Field field) {
+
+		try {
+			Object emptyValue = field.getType().equals(String.class) ? "" : null;
+			field.setAccessible(true);
+			field.set(dto, emptyValue);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} finally {
+			field.setAccessible(false);
+		}
+	}
+
+	private <DTO extends PseudonymizableDto> void restoreOriginalValue(DTO dto, Field field, DTO originalDto) {
+
+		try {
+			field.setAccessible(true);
+			Object originalValue = field.get(originalDto);
+			field.set(dto, originalValue);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} finally {
+			field.setAccessible(false);
+		}
+	}
+
+	private List<Field> getDeclaredFields(Class<?> type) {
+
+		ArrayList<Field> declaredFields = new ArrayList<>(Arrays.asList(type.getDeclaredFields()));
+
+		if (type.getSuperclass() != null) {
+			declaredFields.addAll(getDeclaredFields(type.getSuperclass()));
+		}
+
+		return declaredFields;
+	}
+
+	public interface CustomPseudonymization<DTO> {
+
+		void pseudonymize(DTO dto, boolean isInJurisdiction);
+	}
 }

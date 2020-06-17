@@ -66,6 +66,7 @@ import de.symeda.sormas.api.Disease;
 import de.symeda.sormas.api.DiseaseHelper;
 import de.symeda.sormas.api.FacadeProvider;
 import de.symeda.sormas.api.Language;
+import de.symeda.sormas.api.caze.AgeAndBirthDateDto;
 import de.symeda.sormas.api.caze.CaseClassification;
 import de.symeda.sormas.api.caze.CaseCriteria;
 import de.symeda.sormas.api.caze.CaseDataDto;
@@ -330,7 +331,15 @@ public class CaseFacadeEjb implements CaseFacade {
 
 	@Override
 	public List<CaseDataDto> getByUuids(List<String> uuids) {
-		return caseService.getByUuids(uuids).stream().map(c -> convertToDto(c)).collect(Collectors.toList());
+
+		List<Case> cases = caseService.getByUuids(uuids);
+		if (cases.isEmpty()) {
+			// NOOP for empty list
+			return new ArrayList<>();
+		}
+
+		List<String> undisclosedUuids = caseService.identifyUndisclosed();
+		return cases.stream().map(c -> convertToDto(c, undisclosedUuids.contains(c.getUuid()))).collect(Collectors.toList());
 	}
 
 	@Override
@@ -370,13 +379,14 @@ public class CaseFacadeEjb implements CaseFacade {
 			cases = em.createQuery(cq).getResultList();
 		}
 
-//		pseudonymizationService.pseudonymizeDtoCollection(
-//			CaseIndexDto.class,
-//			cases,
-//			c -> caseJurisdictionChecker.isInJurisdiction(c.getJurisdiction()),
-//			(c, isInJurisdiction) -> {
-//				pseudonymizationService.pseudonymizeDto(AgeAndBirthDateDto.class, c.getAgeAndBirthDate(), isInJurisdiction, null);
-//			});
+		pseudonymizationService.pseudonymizeDtoCollection(
+			CaseIndexDto.class,
+			cases,
+			e -> e.getUuid(),
+			() -> caseService.identifyUndisclosed(),
+			(c, isInJurisdiction) -> {
+				pseudonymizationService.pseudonymizeDto(AgeAndBirthDateDto.class, c.getAgeAndBirthDate(), isInJurisdiction, null);
+			});
 
 		return cases;
 	}
@@ -1179,7 +1189,9 @@ public class CaseFacadeEjb implements CaseFacade {
 
 	@Override
 	public CaseDataDto getCaseDataByUuid(String uuid) {
-		return convertToDto(caseService.getByUuid(uuid));
+
+		Case entity = caseService.getByUuid(uuid);
+		return convertToDto(entity, caseService.isUndisclosed(uuid));
 	}
 
 	@Override
@@ -1789,16 +1801,30 @@ public class CaseFacadeEjb implements CaseFacade {
 		return target;
 	}
 
+	/**
+	 * @deprecated Use {@link #convertToDto(Case, boolean)} to ensure Pseudonymization.
+	 */
+	@Deprecated
 	public CaseDataDto convertToDto(Case source) {
 
 		CaseDataDto dto = toDto(source);
+		return dto;
+	}
 
-//		if (dto != null) {
-//			boolean inJurisdiction = caseJurisdictionChecker.isInJurisdiction(JurisdictionHelper.createCaseJurisdictionDto(source));
-//			pseudonymizationService.pseudonymizeDto(CaseDataDto.class, dto, inJurisdiction, c -> {
-//				pseudonymizationService.pseudonymizeDto(PersonReferenceDto.class, dto.getPerson(), inJurisdiction, null);
-//			});
-//		}
+	/**
+	 * @param source
+	 * @param undisclosed
+	 *            {@code true} means that all personal data will be present, {@code false} clears all personal data.
+	 * @return
+	 */
+	public CaseDataDto convertToDto(Case source, boolean undisclosed) {
+
+		CaseDataDto dto = toDto(source);
+		if (dto != null) {
+			pseudonymizationService.pseudonymizeDto(CaseDataDto.class, dto, undisclosed, c -> {
+				pseudonymizationService.pseudonymizeDto(PersonReferenceDto.class, dto.getPerson(), undisclosed, null);
+			});
+		}
 
 		return dto;
 	}

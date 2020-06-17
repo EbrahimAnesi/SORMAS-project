@@ -18,6 +18,7 @@
 package de.symeda.sormas.backend.caze;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,7 @@ import de.symeda.sormas.api.user.JurisdictionLevel;
 import de.symeda.sormas.api.user.UserRole;
 import de.symeda.sormas.api.utils.DataHelper;
 import de.symeda.sormas.api.utils.DateHelper;
+import de.symeda.sormas.api.utils.jurisdiction.UserJurisdiction;
 import de.symeda.sormas.backend.caze.maternalhistory.MaternalHistory;
 import de.symeda.sormas.backend.caze.porthealthinfo.PortHealthInfo;
 import de.symeda.sormas.backend.clinicalcourse.ClinicalCourse;
@@ -105,6 +107,7 @@ import de.symeda.sormas.backend.therapy.Treatment;
 import de.symeda.sormas.backend.therapy.TreatmentService;
 import de.symeda.sormas.backend.user.User;
 import de.symeda.sormas.backend.user.UserService;
+import de.symeda.sormas.backend.util.JurisdictionHelper;
 
 @Stateless
 @LocalBean
@@ -823,7 +826,6 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 			default:
 			}
 
-
 			// get all cases based on the user's contact association
 			if (userFilterCriteria == null || !userFilterCriteria.isExcludeCasesFromContacts()) {
 				Subquery<Long> contactCaseSubquery = cq.subquery(Long.class);
@@ -889,5 +891,97 @@ public class CaseService extends AbstractCoreAdoService<Case> {
 		}
 
 		return newCaseFilter;
+	}
+
+	/**
+	 * @param uuid
+	 *            Case.uuid.
+	 * @return {@code true}, if the current user is allowed to see personal data (no pseudomyzation).
+	 */
+	public boolean isUndisclosed(String uuid) {
+
+		return identifyUndisclosed(uuid).contains(uuid);
+	}
+
+	/**
+	 * @return uuids of cases, on that the current user is allowed to see personal data (no pseudomyzation).
+	 */
+	public List<String> identifyUndisclosed() {
+
+		return identifyUndisclosed(null);
+	}
+
+	/**
+	 * @param uuid
+	 *            Option to restrict the check to a specific uuid.
+	 * @return uuids of cases, on that the current user is allowed to see personal data (no pseudomyzation).
+	 */
+	private List<String> identifyUndisclosed(String uuid) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<Case> from = cq.from(getElementClass());
+
+		List<Predicate> whereAnds = new ArrayList<>();
+
+		// TODO #2309: Do we have to filter for active cases by default?
+//		whereAnds.add(createActiveCasesFilter(cb, from));
+		// TODO #2309: Not use the visibility filter, the personal data filter should do the same and stronger.
+//		whereAnds.add(createUserFilter(cb, cq, from));
+
+		whereAnds.add(createUndisclosedFilter(cb, cq, from));
+
+		if (uuid != null) {
+			whereAnds.add(cb.equal(from.get(Case.UUID), uuid));
+		}
+
+		cq.where(cb.and(whereAnds.toArray(new Predicate[whereAnds.size()])));
+		cq.select(from.get(Case.UUID));
+
+		List<String> result = em.createQuery(cq).getResultList();
+		return result;
+	}
+
+	public Predicate createUndisclosedFilter(CriteriaBuilder cb, CriteriaQuery<String> cq, From<Case, Case> casePath) {
+
+		final User user = userService.getCurrentUser();
+		JurisdictionLevel jurisdictionLevel = user.getJurisdictionLevel();
+		UserJurisdiction userJurisdiction = JurisdictionHelper.createUserJurisdiction(user);
+
+		final Predicate filter;
+		switch (jurisdictionLevel) {
+		case NATION:
+			filter = cb.equal(casePath.join(Case.REPORTING_USER, JoinType.LEFT).get(User.UUID), userJurisdiction.getUuid());
+			break;
+		case REGION:
+			filter = cb.equal(casePath.join(Case.REGION, JoinType.LEFT).get(Region.UUID), userJurisdiction.getRegionUuid());
+			break;
+		case DISTRICT:
+			filter = cb.equal(casePath.join(Case.DISTRICT, JoinType.LEFT).get(District.UUID), userJurisdiction.getDistrictUuid());
+			break;
+		case COMMUNITY:
+			filter = cb.equal(casePath.join(Case.COMMUNITY, JoinType.LEFT).get(Community.UUID), userJurisdiction.getCommunityUuid());
+			break;
+		case HEALTH_FACILITY:
+			filter = cb.equal(casePath.join(Case.HEALTH_FACILITY, JoinType.LEFT).get(Facility.UUID), userJurisdiction.getHealthFacilityUuid());
+			break;
+		case POINT_OF_ENTRY:
+			filter = cb.equal(casePath.join(Case.POINT_OF_ENTRY, JoinType.LEFT).get(PointOfEntry.UUID), userJurisdiction.getPointOfEntryUuid());
+			break;
+		case NONE:
+		case LABORATORY:
+		case EXTERNAL_LABORATORY:
+			filter = cb.disjunction();
+			break;
+		default:
+			/*
+			 * TODO #2309: Is there always a jurisdiction level?
+			 * Then this should throw a Default: No personal data shall be shown by accident
+			 */
+			filter = cb.disjunction();
+			break;
+		}
+
+		return filter;
 	}
 }
