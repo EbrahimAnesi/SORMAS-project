@@ -67,6 +67,7 @@ import de.symeda.sormas.api.DiseaseHelper;
 import de.symeda.sormas.api.FacadeProvider;
 import de.symeda.sormas.api.Language;
 import de.symeda.sormas.api.caze.AgeAndBirthDateDto;
+import de.symeda.sormas.api.caze.BirthDateDto;
 import de.symeda.sormas.api.caze.CaseClassification;
 import de.symeda.sormas.api.caze.CaseCriteria;
 import de.symeda.sormas.api.caze.CaseDataDto;
@@ -323,23 +324,16 @@ public class CaseFacadeEjb implements CaseFacade {
 		if (userService.getCurrentUser() == null) {
 			return Collections.emptyList();
 		}
-		return caseService.getAllActiveCasesAfter(date, includeExtendedChangeDateFilters)
-			.stream()
-			.map(c -> convertToDto(c))
-			.collect(Collectors.toList());
+
+		List<Case> cases = caseService.getAllActiveCasesAfter(date, includeExtendedChangeDateFilters);
+		return convertToDtos(cases);
 	}
 
 	@Override
 	public List<CaseDataDto> getByUuids(List<String> uuids) {
 
-		List<Case> cases = caseService.getByUuids(uuids);
-		if (cases.isEmpty()) {
-			// NOOP for empty list
-			return new ArrayList<>();
-		}
-
-		List<String> undisclosedUuids = caseService.identifyUndisclosed();
-		return cases.stream().map(c -> convertToDto(c, undisclosedUuids.contains(c.getUuid()))).collect(Collectors.toList());
+		List<Case> entities = caseService.getByUuids(uuids);
+		return convertToDtos(entities);
 	}
 
 	@Override
@@ -371,8 +365,7 @@ public class CaseFacadeEjb implements CaseFacade {
 	public List<CaseIndexDto> getIndexList(CaseCriteria caseCriteria, Integer first, Integer max, List<SortProperty> sortProperties) {
 
 		CriteriaQuery<CaseIndexDto> cq = listQueryBuilder.buildIndexCriteria(caseCriteria, sortProperties);
-
-		List<CaseIndexDto> cases;
+		final List<CaseIndexDto> cases;
 		if (first != null && max != null) {
 			cases = em.createQuery(cq).setFirstResult(first).setMaxResults(max).getResultList();
 		} else {
@@ -395,21 +388,21 @@ public class CaseFacadeEjb implements CaseFacade {
 	public List<CaseIndexDetailedDto> getIndexDetailedList(CaseCriteria caseCriteria, Integer first, Integer max, List<SortProperty> sortProperties) {
 
 		CriteriaQuery<CaseIndexDetailedDto> cq = listQueryBuilder.buildIndexDetailedCriteria(caseCriteria, sortProperties);
-
-		List<CaseIndexDetailedDto> cases;
+		final List<CaseIndexDetailedDto> cases;
 		if (first != null && max != null) {
 			cases = em.createQuery(cq).setFirstResult(first).setMaxResults(max).getResultList();
 		} else {
 			cases = em.createQuery(cq).getResultList();
 		}
 
-//		pseudonymizationService.pseudonymizeDtoCollection(
-//			CaseIndexDetailedDto.class,
-//			cases,
-//			c -> caseJurisdictionChecker.isInJurisdiction(c.getJurisdiction()),
-//			(c, isInJurisdiction) -> {
-//				pseudonymizationService.pseudonymizeDto(AgeAndBirthDateDto.class, c.getAgeAndBirthDate(), isInJurisdiction, null);
-//			});
+		pseudonymizationService.pseudonymizeDtoCollection(
+			CaseIndexDetailedDto.class,
+			cases,
+			e -> e.getUuid(),
+			() -> caseService.identifyUndisclosed(),
+			(c, isInJurisdiction) -> {
+				pseudonymizationService.pseudonymizeDto(AgeAndBirthDateDto.class, c.getAgeAndBirthDate(), isInJurisdiction, null);
+			});
 
 		return cases;
 	}
@@ -612,6 +605,7 @@ public class CaseFacadeEjb implements CaseFacade {
 				samples = samplesList.stream().collect(Collectors.groupingBy(s -> s.getAssociatedCase().getId()));
 			}
 
+			List<String> undisclosedUuids = caseService.identifyUndisclosed();
 			for (CaseExportDto exportDto : resultList) {
 				if (exportConfiguration == null || exportConfiguration.getProperties().contains(CaseExportDto.COUNTRY)) {
 					exportDto.setCountry(configFacade.getEpidPrefix());
@@ -736,10 +730,11 @@ public class CaseFacadeEjb implements CaseFacade {
 						}
 					});
 				}
-//				boolean inJurisdiction = caseJurisdictionChecker.isInJurisdiction(exportDto.getJurisdiction());
-//				pseudonymizationService.pseudonymizeDto(CaseExportDto.class, exportDto, inJurisdiction, (c) -> {
-//					pseudonymizationService.pseudonymizeDto(BirthDateDto.class, c.getBirthdate(), inJurisdiction, null);
-//				});
+
+				boolean undisclosed = undisclosedUuids.contains(exportDto.getUuid());
+				pseudonymizationService.pseudonymizeDto(CaseExportDto.class, exportDto, undisclosed, (c) -> {
+					pseudonymizationService.pseudonymizeDto(BirthDateDto.class, c.getBirthdate(), undisclosed, null);
+				});
 			}
 		}
 
@@ -805,13 +800,10 @@ public class CaseFacadeEjb implements CaseFacade {
 
 		List<MapCaseDto> cases = caseService.getCasesForMap(region, district, disease, from, to);
 
-//		pseudonymizationService.pseudonymizeDtoCollection(
-//			MapCaseDto.class,
-//			cases,
-//			c -> caseJurisdictionChecker.isInJurisdiction(c.getJurisdiction()),
-//			(c, isInJurisdiction) -> {
-//				pseudonymizationService.pseudonymizeDto(PersonReferenceDto.class, c.getPerson(), isInJurisdiction, null);
-//			});
+		pseudonymizationService
+			.pseudonymizeDtoCollection(MapCaseDto.class, cases, e -> e.getUuid(), () -> caseService.identifyUndisclosed(), (c, isInJurisdiction) -> {
+				pseudonymizationService.pseudonymizeDto(PersonReferenceDto.class, c.getPerson(), isInJurisdiction, null);
+			});
 
 		return cases;
 	}
@@ -819,10 +811,8 @@ public class CaseFacadeEjb implements CaseFacade {
 	@Override
 	public List<CaseDataDto> getAllCasesOfPerson(String personUuid) {
 
-		return caseService.findBy(new CaseCriteria().person(new PersonReferenceDto(personUuid)), false)
-			.stream()
-			.map(c -> convertToDto(c))
-			.collect(Collectors.toList());
+		List<Case> cases = caseService.findBy(new CaseCriteria().person(new PersonReferenceDto(personUuid)), false);
+		return convertToDtos(cases);
 	}
 
 	@Override
@@ -1211,10 +1201,10 @@ public class CaseFacadeEjb implements CaseFacade {
 
 		SymptomsHelper.updateIsSymptomatic(dto.getSymptoms());
 
-//		if (existingCaseDto != null) {
-//			boolean inJurisdiction = caseJurisdictionChecker.isInJurisdiction(JurisdictionHelper.createCaseJurisdictionDto(caze));
-//			pseudonymizationService.restorePseudonymizedValues(CaseDataDto.class, dto, existingCaseDto, inJurisdiction);
-//		}
+		boolean undisclosed = caseService.isUndisclosed(caze.getUuid());
+		if (existingCaseDto != null) {
+			pseudonymizationService.restorePseudonymizedValues(CaseDataDto.class, dto, existingCaseDto, undisclosed);
+		}
 
 		validate(dto);
 
@@ -1230,7 +1220,7 @@ public class CaseFacadeEjb implements CaseFacade {
 			onCaseChanged(existingCaseDto, caze);
 		}
 
-		return convertToDto(caze);
+		return convertToDto(caze, undisclosed);
 	}
 
 	public void setSampleAssociations(ContactReferenceDto sourceContact, CaseReferenceDto cazeRef) {
@@ -1802,13 +1792,18 @@ public class CaseFacadeEjb implements CaseFacade {
 	}
 
 	/**
-	 * @deprecated Use {@link #convertToDto(Case, boolean)} to ensure Pseudonymization.
+	 * @param entities
+	 *            cases to be converted and maybe pseudonymized.
 	 */
-	@Deprecated
-	public CaseDataDto convertToDto(Case source) {
+	private List<CaseDataDto> convertToDtos(List<Case> entities) {
 
-		CaseDataDto dto = toDto(source);
-		return dto;
+		if (entities.isEmpty()) {
+			// NOOP for empty list
+			return new ArrayList<>();
+		}
+
+		List<String> undisclosedUuids = caseService.identifyUndisclosed();
+		return entities.stream().map(e -> convertToDto(e, undisclosedUuids.contains(e.getUuid()))).collect(Collectors.toList());
 	}
 
 	/**
@@ -1817,7 +1812,7 @@ public class CaseFacadeEjb implements CaseFacade {
 	 *            {@code true} means that all personal data will be present, {@code false} clears all personal data.
 	 * @return
 	 */
-	public CaseDataDto convertToDto(Case source, boolean undisclosed) {
+	private CaseDataDto convertToDto(Case source, boolean undisclosed) {
 
 		CaseDataDto dto = toDto(source);
 		if (dto != null) {
@@ -1832,11 +1827,10 @@ public class CaseFacadeEjb implements CaseFacade {
 	public CaseReferenceDto convertToReferenceDto(Case source) {
 
 		CaseReferenceDto dto = toReferenceDto(source);
-
-//		if (dto != null) {
-//			boolean inJurisdiction = caseJurisdictionChecker.isInJurisdiction(JurisdictionHelper.createCaseJurisdictionDto(source));
-//			pseudonymizationService.pseudonymizeDto(CaseReferenceDto.class, dto, inJurisdiction, null);
-//		}
+		if (dto != null) {
+			boolean undisclosed = caseService.isUndisclosed(dto.getUuid());
+			pseudonymizationService.pseudonymizeDto(CaseReferenceDto.class, dto, undisclosed, null);
+		}
 
 		return dto;
 	}
