@@ -4669,4 +4669,7 @@ ALTER TABLE region ADD CONSTRAINT fk_region_area_id FOREIGN KEY (area_id) REFERE
 
 INSERT INTO schema_version (version_number, comment) VALUES (217, 'Add Area as new infrastructure type #1983');
 
+-- 2020-06-23 Import and use new facility types #1637
+
+INSERT INTO schema_version (version_number, comment) VALUES (218, 'Import and use new facility types #1637');
 -- *** Insert new sql commands BEFORE this line ***
