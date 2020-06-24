@@ -195,6 +195,7 @@ public interface Strings {
 	String headingCreateNewContact = "headingCreateNewContact";
 	String headingCreateNewEvent = "headingCreateNewEvent";
 	String headingCreateNewEventParticipant = "headingCreateNewEventParticipant";
+	String headingCreateNewFacility = "headingCreateNewFacility";
 	String headingCreateNewPerson = "headingCreateNewPerson";
 	String headingCreateNewPrescription = "headingCreateNewPrescription";
 	String headingCreateNewSample = "headingCreateNewSample";
@@ -260,9 +261,8 @@ public interface Strings {
 	String headingImportedCaseInfo = "headingImportedCaseInfo";
 	String headingImportedPersonInfo = "headingImportedPersonInfo";
 	String headingImportError = "headingImportError";
+	String headingImportFacilities = "headingImportFacilities";
 	String headingImportFailed = "headingImportFailed";
-	String headingImportHealthFacilities = "headingImportHealthFacilities";
-	String headingImportLaboratories = "headingImportLaboratories";
 	String headingImportPointsOfEntry = "headingImportPointsOfEntry";
 	String headingImportPopulationData = "headingImportPopulationData";
 	String headingImportRegions = "headingImportRegions";
@@ -420,7 +420,6 @@ public interface Strings {
 	String labelNumberOfCommunities = "labelNumberOfCommunities";
 	String labelNumberOfDistricts = "labelNumberOfDistricts";
 	String labelNumberOfFacilities = "labelNumberOfFacilities";
-	String labelNumberOfLaboratories = "labelNumberOfLaboratories";
 	String labelNumberOfPointofEntry = "labelNumberOfPointofEntry";
 	String labelNumberOfRegions = "labelNumberOfRegions";
 	String labelNumberOfUsers = "labelNumberOfUsers";
@@ -516,13 +515,13 @@ public interface Strings {
 	String messageFacilitiesDearchived = "messageFacilitiesDearchived";
 	String messageFacilitiesDearchivingNotPossible = "messageFacilitiesDearchivingNotPossible";
 	String messageFacilityArchived = "messageFacilityArchived";
+	String messageFacilityChanged = "messageFacilityChanged";
 	String messageFacilityDearchived = "messageFacilityDearchived";
 	String messageFacilityDearchivingNotPossible = "messageFacilityDearchivingNotPossible";
+	String messageFacilityMulitChanged = "messageFacilityMulitChanged";
 	String messageFollowUpCanceled = "messageFollowUpCanceled";
 	String messageFollowUpStatusChanged = "messageFollowUpStatusChanged";
 	String messageFormHasErrorsPathogenTest = "messageFormHasErrorsPathogenTest";
-	String messageHealthFacilityChanged = "messageHealthFacilityChanged";
-	String messageHealthFacilityMulitChanged = "messageHealthFacilityMulitChanged";
 	String messageImportCanceled = "messageImportCanceled";
 	String messageImportCanceledErrors = "messageImportCanceledErrors";
 	String messageImportError = "messageImportError";
