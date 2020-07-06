@@ -37,6 +37,5 @@ public class LanguageTest {
 		assertThat(Language.fromLocaleString(""), is(Language.EN));
 		assertThat(Language.fromLocaleString("tlh"), is(Language.EN));
 		assertThat(Language.fromLocaleString("en-GB"), is(Language.EN));
-		assertThat(Language.fromLocaleString("de-CH"), is(Language.EN));
 	}
 }

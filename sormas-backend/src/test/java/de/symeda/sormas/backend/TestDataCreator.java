@@ -721,7 +721,7 @@ public class TestDataCreator {
 	}
 
 	public Facility createFacility(String facilityName, Region region, District district, Community community) {
-		return createFacility(facilityName, null, region, district, community);
+		return createFacility(facilityName, FacilityType.HOSPITAL, region, district, community);
 	}
 
 	public Facility createFacility(String facilityName, FacilityType type, Region region, District district, Community community) {
@@ -746,6 +746,7 @@ public class TestDataCreator {
 
 		FacilityDto facility = FacilityDto.build();
 		facility.setName(facilityName);
+		facility.setType(FacilityType.HOSPITAL);
 		facility.setCommunity(community);
 		facility.setDistrict(district);
 		facility.setRegion(region);

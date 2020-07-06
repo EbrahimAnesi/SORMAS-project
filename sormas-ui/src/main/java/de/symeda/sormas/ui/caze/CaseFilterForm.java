@@ -14,6 +14,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.util.converter.Converter;
 import com.vaadin.v7.ui.CheckBox;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.Field;
@@ -24,6 +25,9 @@ import de.symeda.sormas.api.caze.CaseCriteria;
 import de.symeda.sormas.api.caze.CaseDataDto;
 import de.symeda.sormas.api.caze.CaseOrigin;
 import de.symeda.sormas.api.caze.NewCaseDateType;
+import de.symeda.sormas.api.facility.FacilityDto;
+import de.symeda.sormas.api.facility.FacilityType;
+import de.symeda.sormas.api.facility.FacilityTypeGroup;
 import de.symeda.sormas.api.i18n.Captions;
 import de.symeda.sormas.api.i18n.Descriptions;
 import de.symeda.sormas.api.i18n.I18nProperties;
@@ -45,6 +49,7 @@ import de.symeda.sormas.ui.utils.ButtonHelper;
 import de.symeda.sormas.ui.utils.CssStyles;
 import de.symeda.sormas.ui.utils.EpiWeekAndDateFilterComponent;
 import de.symeda.sormas.ui.utils.FieldConfiguration;
+import de.symeda.sormas.ui.utils.FieldHelper;
 
 public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 
@@ -53,13 +58,13 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 	private static final String WEEK_AND_DATE_FILTER = "moreFilters";
 
 	//@formatter:off
-	private static final String MORE_FILTERS_HTML_LAYOUT = filterLocs(CaseCriteria.PRESENT_CONDITION,
-			CaseDataDto.REGION, CaseDataDto.DISTRICT, CaseDataDto.COMMUNITY, CaseDataDto.HEALTH_FACILITY,
-			CaseDataDto.POINT_OF_ENTRY, CaseDataDto.SURVEILLANCE_OFFICER, CaseCriteria.REPORTING_USER_ROLE,
-			CaseCriteria.REPORTING_USER_LIKE, CaseDataDto.QUARANTINE_TO)
+	private static final String MORE_FILTERS_HTML_LAYOUT = filterLocs(CaseDataDto.REGION, CaseDataDto.DISTRICT,
+				CaseDataDto.COMMUNITY, CaseCriteria.FACILITY_TYPE_GROUP, CaseCriteria.FACILITY_TYPE, CaseDataDto.HEALTH_FACILITY, CaseDataDto.POINT_OF_ENTRY)
+			+ filterLocs(CaseCriteria.PRESENT_CONDITION, CaseDataDto.SURVEILLANCE_OFFICER, CaseCriteria.REPORTING_USER_ROLE,
+				CaseCriteria.REPORTING_USER_LIKE, CaseDataDto.QUARANTINE_TO)
 			+ filterLocsCss("vspace-3", CaseCriteria.MUST_HAVE_NO_GEO_COORDINATES,
-					CaseCriteria.MUST_BE_PORT_HEALTH_CASE_WITHOUT_FACILITY, CaseCriteria.MUST_HAVE_CASE_MANAGEMENT_DATA,
-					CaseCriteria.EXCLUDE_SHARED_CASES, CaseCriteria.WITHOUT_RESPONSIBLE_OFFICER)
+				CaseCriteria.MUST_BE_PORT_HEALTH_CASE_WITHOUT_FACILITY, CaseCriteria.MUST_HAVE_CASE_MANAGEMENT_DATA,
+				CaseCriteria.EXCLUDE_SHARED_CASES, CaseCriteria.WITHOUT_RESPONSIBLE_OFFICER)
 			+ loc(WEEK_AND_DATE_FILTER);
 	//@formatter:on
 
@@ -114,11 +119,73 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 		ComboBox districtField = addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseDataDto.DISTRICT, 140));
 		districtField.setDescription(I18nProperties.getDescription(Descriptions.descDistrictFilter));
 
-		addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseDataDto.COMMUNITY, 140));
+		ComboBox communityField = addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseDataDto.COMMUNITY, 140));
 
 		if (!UserRole.isPortHealthUser(UserProvider.getCurrent().getUserRoles())) {
+
+			ComboBox typeGroup = addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseCriteria.FACILITY_TYPE_GROUP, 140));
+			typeGroup.setInputPrompt(I18nProperties.getCaption(Captions.Facility_typeGroup));
+			typeGroup.removeAllItems();
+			FieldHelper.updateEnumData(typeGroup, FacilityTypeGroup.getTypeGroupsSuitableForLongerStay());
+
+			ComboBox type = addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseCriteria.FACILITY_TYPE, 140));
+			type.setInputPrompt(I18nProperties.getPrefixCaption(FacilityDto.I18N_PREFIX, FacilityDto.TYPE));
+			type.removeAllItems();
+
+//			ComboBox typeGroupFilter = new ComboBox();
+//			typeGroupFilter.setId("typeGroup");
+//			typeGroupFilter.setWidth(140, Unit.PIXELS);
+//			typeGroupFilter.setInputPromt(I18nProperties.getCaption(Captions.Facility_typeGroup));
+//			FieldHelper.updateEnumData(typeGroupFilter, FacilityTypeGroup.getTypeGroupsSuitableForLongerStay());
+//			moreFiltersContainer.addComponent(typeGroupFilter, CaseCriteria.FACILITY_TYPE_GROUP);
+//
+//			ComboBox typeFilter = new ComboBox();
+//			typeFilter.setId(FacilityDto.TYPE);
+//			typeFilter.setWidth(140, Unit.PIXELS);
+//			typeFilter.setInputPromt(I18nProperties.getPrefixCaption(FacilityDto.I18N_PREFIX, FacilityDto.TYPE));
+//			moreFiltersContainer.addComponent(typeFilter, CaseCriteria.FACILITY_TYPE);
+
 			ComboBox facilityField = addField(moreFiltersContainer, FieldConfiguration.pixelSized(CaseDataDto.HEALTH_FACILITY, 140));
 			facilityField.setDescription(I18nProperties.getDescription(Descriptions.descFacilityFilter));
+
+			typeGroup.addValueChangeListener(e -> {
+				getValue().facilityTypeGroup((FacilityTypeGroup) e.getProperty().getValue());
+				FieldHelper.updateItems(type, FacilityType.getFacilityTypesByGroup((FacilityTypeGroup) typeGroup.getValue(), false));
+			});
+			type.addValueChangeListener(e -> {
+				getValue().facilityType((FacilityType) e.getProperty().getValue());
+			});
+
+//			typeGroup.addValueChangeListener(e -> {
+//				FieldHelper.removeItems(type);
+//				if (typeGroup.getValue() != null) {
+//					type.setEnabled(true);
+//					FieldHelper.updateEnumData(type, FacilityType.getFacilityTypesByGroup((FacilityTypeGroup) typeGroup.getValue(), true));
+//				} else {
+//					type.setEnabled(false);
+//				}
+//			});
+//			type.addValueChangeListener(e -> {
+//				FieldHelper.removeItems(facilityField);
+//				if (type.getValue() != null && districtField.getValue() != null) {
+//					facilityField.setEnabled(true);
+//					if (communityField.getValue() != null) {
+//						facilityField.addItems(
+//							FacadeProvider.getFacilityFacade()
+//								.getActiveFacilitiesByCommunityAndType(
+//									(CommunityReferenceDto) communityField.getValue(),
+//									(FacilityType) type.getValue(),
+//									true));
+//					} else {
+//						facilityField.addItems(
+//							FacadeProvider.getFacilityFacade()
+//								.getActiveFacilitiesByDistrictAndType(
+//									(DistrictReferenceDto) districtField.getValue(),
+//									(FacilityType) type.getValue(),
+//									true));
+//					}
+//				}
+//			});
 		}
 
 		if (UserProvider.getCurrent().hasUserRight(UserRight.PORT_HEALTH_INFO_VIEW)) {
@@ -269,24 +336,35 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 			}
 		}
 
+		ComboBox typeGroupField = (ComboBox) getField(CaseCriteria.FACILITY_TYPE_GROUP);
+		ComboBox typeField = (ComboBox) getField(CaseCriteria.FACILITY_TYPE);
+
 		if (user.getDistrict() != null && user.getCommunity() == null) {
 			communityField.addItems(FacadeProvider.getCommunityFacade().getAllActiveByDistrict(user.getDistrict().getUuid()));
 			communityField.setEnabled(true);
+			typeGroupField.setEnabled(true);
 		} else if (criteria.getDistrict() != null) {
 			communityField.addItems(FacadeProvider.getCommunityFacade().getAllActiveByDistrict(criteria.getDistrict().getUuid()));
 			communityField.setEnabled(true);
+			typeGroupField.setEnabled(true);
 		} else {
 			communityField.setEnabled(false);
+			typeGroupField.setEnabled(false);
+			typeField.setEnabled(false);
 		}
 
 		ComboBox facilityField = (ComboBox) getField(CaseDataDto.HEALTH_FACILITY);
 		ComboBox pointOfEntryField = (ComboBox) getField(CaseDataDto.POINT_OF_ENTRY);
 
 		DistrictReferenceDto district = criteria.getDistrict();
+		FacilityTypeGroup typeGroup = criteria.getFacilityTypeGroup();
+		FacilityType type = criteria.getFacilityType();
 		CommunityReferenceDto community = criteria.getCommunity();
 
 		if (district == null) {
 			communityField.setEnabled(false);
+			typeGroupField.setEnabled(false);
+			typeField.setEnabled(false);
 			if (facilityField != null) {
 				facilityField.setEnabled(false);
 			}
@@ -296,12 +374,12 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 		} else {
 			communityField.addItems(FacadeProvider.getCommunityFacade().getAllActiveByDistrict(district.getUuid()));
 
-			if (facilityField != null) {
+			if (facilityField != null && type != null) {
 				facilityField.setEnabled(true);
 				if (community == null) {
-					facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByDistrict(district, true));
+					facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType(district, type, true));
 				} else {
-					facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByCommunity(community, true));
+					facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveFacilitiesByCommunityAndType(community, type, true));
 				}
 			}
 
@@ -309,6 +387,26 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 				pointOfEntryField.setEnabled(criteria.getCaseOrigin() != CaseOrigin.IN_COUNTRY);
 				pointOfEntryField.addItems(FacadeProvider.getPointOfEntryFacade().getAllActiveByDistrict(district.getUuid(), true));
 			}
+		}
+
+		if (typeGroup != null && typeField != null) {
+			typeField.removeAllItems();
+			typeField.setEnabled(true);
+			FieldHelper.updateEnumData(typeField, FacilityType.getFacilityTypesByGroup(typeGroup, true));
+		} else {
+			typeField.setEnabled(false);
+		}
+
+		if (type != null && facilityField != null) {
+			facilityField.removeAllItems();
+			facilityField.setEnabled(true);
+			if (community == null) {
+				facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType(district, type, true));
+			} else {
+				facilityField.addItems(FacadeProvider.getFacilityFacade().getActiveFacilitiesByCommunityAndType(community, type, true));
+			}
+		} else {
+			facilityField.setEnabled(false);
 		}
 
 		getField(CaseCriteria.MUST_BE_PORT_HEALTH_CASE_WITHOUT_FACILITY).setEnabled(criteria.getCaseOrigin() != CaseOrigin.IN_COUNTRY);
@@ -409,5 +507,12 @@ public class CaseFilterForm extends AbstractFilterForm<CaseCriteria> {
 	public void enableSearchAndReportingUser() {
 		getField(CaseCriteria.NAME_UUID_EPID_NUMBER_LIKE).setEnabled(true);
 		getField(CaseCriteria.REPORTING_USER_LIKE).setEnabled(true);
+	}
+
+	@Override
+	public void setValue(CaseCriteria newFieldValue) throws ReadOnlyException, Converter.ConversionException {
+
+		super.setValue(newFieldValue);
+
 	}
 }

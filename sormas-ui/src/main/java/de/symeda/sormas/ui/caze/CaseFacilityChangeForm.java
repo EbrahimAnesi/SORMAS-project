@@ -83,9 +83,9 @@ public class CaseFacilityChangeForm extends AbstractEditForm<CaseDataDto> {
 			FieldHelper.updateItems(
 				community,
 				districtDto != null ? FacadeProvider.getCommunityFacade().getAllActiveByDistrict(districtDto.getUuid()) : null);
-			FieldHelper.updateItems(
-				facility,
-				districtDto != null ? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByDistrict(districtDto, true) : null);
+//			FieldHelper.updateItems(
+//				facility,
+//				districtDto != null ? FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType(districtDto, true) : null);
 
 			List<UserReferenceDto> assignableSurveillanceOfficers =
 				FacadeProvider.getUserFacade().getUserRefsByDistrict(districtDto, false, UserRole.SURVEILLANCE_OFFICER);
@@ -99,13 +99,13 @@ public class CaseFacilityChangeForm extends AbstractEditForm<CaseDataDto> {
 		community.addValueChangeListener(e -> {
 			FieldHelper.removeItems(facility);
 			CommunityReferenceDto communityDto = (CommunityReferenceDto) e.getProperty().getValue();
-			FieldHelper.updateItems(
-				facility,
-				communityDto != null
-					? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByCommunity(communityDto, true)
-					: district.getValue() != null
-						? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByDistrict((DistrictReferenceDto) district.getValue(), true)
-						: null);
+//			FieldHelper.updateItems(
+//				facility,
+//				communityDto != null
+//					? FacadeProvider.getFacilityFacade().getActiveFacilitiesByCommunityAndType(communityDto, true)
+//					: district.getValue() != null
+//						? FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType((DistrictReferenceDto) district.getValue(), true)
+//						: null);
 		});
 		facility.addValueChangeListener(e -> {
 			if (e.getProperty().getValue() != null) {

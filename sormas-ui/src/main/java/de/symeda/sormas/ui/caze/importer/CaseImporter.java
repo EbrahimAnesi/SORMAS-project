@@ -428,33 +428,33 @@ public class CaseImporter extends DataImporter {
 					} else if (propertyType.isAssignableFrom(FacilityReferenceDto.class)) {
 						Pair<DistrictReferenceDto, CommunityReferenceDto> infrastructureData =
 							ImporterPersonHelper.getDistrictAndCommunityBasedOnFacility(pd.getName(), caze, person, currentElement);
-						List<FacilityReferenceDto> facility = FacadeProvider.getFacilityFacade()
-							.getByName(entry, infrastructureData.getElement0(), infrastructureData.getElement1(), false);
-						if (facility.isEmpty()) {
-							if (infrastructureData.getElement1() != null) {
-								throw new ImportErrorException(
-									I18nProperties.getValidationError(
-										Validations.importEntryDoesNotExistDbOrCommunity,
-										entry,
-										buildEntityProperty(entryHeaderPath)));
-							} else {
-								throw new ImportErrorException(
-									I18nProperties.getValidationError(
-										Validations.importEntryDoesNotExistDbOrDistrict,
-										entry,
-										buildEntityProperty(entryHeaderPath)));
-							}
-						} else if (facility.size() > 1 && infrastructureData.getElement1() == null) {
-							throw new ImportErrorException(
-								I18nProperties
-									.getValidationError(Validations.importFacilityNotUniqueInDistrict, entry, buildEntityProperty(entryHeaderPath)));
-						} else if (facility.size() > 1 && infrastructureData.getElement1() != null) {
-							throw new ImportErrorException(
-								I18nProperties
-									.getValidationError(Validations.importFacilityNotUniqueInCommunity, entry, buildEntityProperty(entryHeaderPath)));
-						} else {
-							pd.getWriteMethod().invoke(currentElement, facility.get(0));
-						}
+//						List<FacilityReferenceDto> facility = FacadeProvider.getFacilityFacade()
+//							.getByNameAndType(entry, infrastructureData.getElement0(), infrastructureData.getElement1(), false);
+//						if (facility.isEmpty()) {
+//							if (infrastructureData.getElement1() != null) {
+//								throw new ImportErrorException(
+//									I18nProperties.getValidationError(
+//										Validations.importEntryDoesNotExistDbOrCommunity,
+//										entry,
+//										buildEntityProperty(entryHeaderPath)));
+//							} else {
+//								throw new ImportErrorException(
+//									I18nProperties.getValidationError(
+//										Validations.importEntryDoesNotExistDbOrDistrict,
+//										entry,
+//										buildEntityProperty(entryHeaderPath)));
+//							}
+//						} else if (facility.size() > 1 && infrastructureData.getElement1() == null) {
+//							throw new ImportErrorException(
+//								I18nProperties
+//									.getValidationError(Validations.importFacilityNotUniqueInDistrict, entry, buildEntityProperty(entryHeaderPath)));
+//						} else if (facility.size() > 1 && infrastructureData.getElement1() != null) {
+//							throw new ImportErrorException(
+//								I18nProperties
+//									.getValidationError(Validations.importFacilityNotUniqueInCommunity, entry, buildEntityProperty(entryHeaderPath)));
+//						} else {
+//							pd.getWriteMethod().invoke(currentElement, facility.get(0));
+//						}
 					} else if (propertyType.isAssignableFrom(PointOfEntryReferenceDto.class)) {
 						List<PointOfEntryReferenceDto> pointOfEntry =
 							FacadeProvider.getPointOfEntryFacade().getByName(entry, caze.getDistrict(), false);

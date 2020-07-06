@@ -174,7 +174,7 @@ public class BulkCaseDataForm extends AbstractEditForm<CaseBulkEditData> {
 			});
 		}
 
-		healthFacilityCheckbox = new CheckBox(I18nProperties.getCaption(Captions.bulkHealthFacility));
+		healthFacilityCheckbox = new CheckBox(I18nProperties.getCaption(Captions.bulkFacility));
 		getContent().addComponent(healthFacilityCheckbox, HEALTH_FACILITY_CHECKBOX);
 
 		ComboBox region = addInfrastructureField(CaseBulkEditData.REGION);
@@ -202,20 +202,20 @@ public class BulkCaseDataForm extends AbstractEditForm<CaseBulkEditData> {
 			FieldHelper.updateItems(
 				community,
 				districtDto != null ? FacadeProvider.getCommunityFacade().getAllActiveByDistrict(districtDto.getUuid()) : null);
-			FieldHelper.updateItems(
-				healthFacility,
-				districtDto != null ? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByDistrict(districtDto, false) : null);
+//			FieldHelper.updateItems(
+//				healthFacility,
+//				districtDto != null ? FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType(districtDto, false) : null);
 		});
 		community.addValueChangeListener(e -> {
 			FieldHelper.removeItems(healthFacility);
 			CommunityReferenceDto communityDto = (CommunityReferenceDto) e.getProperty().getValue();
-			FieldHelper.updateItems(
-				healthFacility,
-				communityDto != null
-					? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByCommunity(communityDto, false)
-					: district.getValue() != null
-						? FacadeProvider.getFacilityFacade().getActiveHealthFacilitiesByDistrict((DistrictReferenceDto) district.getValue(), false)
-						: null);
+//			FieldHelper.updateItems(
+//				healthFacility,
+//				communityDto != null
+//					? FacadeProvider.getFacilityFacade().getActiveFacilitiesByCommunityAndType(communityDto, false)
+//					: district.getValue() != null
+//						? FacadeProvider.getFacilityFacade().getActiveFacilitiesByDistrictAndType((DistrictReferenceDto) district.getValue(), false)
+//						: null);
 		});
 		region.addItems(FacadeProvider.getRegionFacade().getAllActiveAsReference());
 

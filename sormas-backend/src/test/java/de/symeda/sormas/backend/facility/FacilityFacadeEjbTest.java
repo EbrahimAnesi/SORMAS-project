@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import de.symeda.sormas.api.facility.FacilityDto;
 import de.symeda.sormas.api.facility.FacilityType;
-import de.symeda.sormas.api.region.CommunityReferenceDto;
-import de.symeda.sormas.api.region.DistrictReferenceDto;
 import de.symeda.sormas.backend.AbstractBeanTest;
 import de.symeda.sormas.backend.TestDataCreator.RDCF;
 import de.symeda.sormas.backend.region.Community;
@@ -83,7 +81,7 @@ public class FacilityFacadeEjbTest extends AbstractBeanTest {
 		Facility f2 = creator.createFacility("f2", r, d, c);
 		getFacilityFacade().archive(f2.getUuid());
 
-		assertEquals(1, getFacilityFacade().getActiveHealthFacilitiesByCommunity(new CommunityReferenceDto(c.getUuid()), false).size());
+//		assertEquals(1, getFacilityFacade().getActiveFacilitiesByCommunityAndType(new CommunityReferenceDto(c.getUuid()), false).size());
 	}
 
 	@Test
@@ -96,7 +94,7 @@ public class FacilityFacadeEjbTest extends AbstractBeanTest {
 		Facility f2 = creator.createFacility("f2", r, d, c);
 		getFacilityFacade().archive(f2.getUuid());
 
-		assertEquals(1, getFacilityFacade().getActiveHealthFacilitiesByDistrict(new DistrictReferenceDto(d.getUuid()), false).size());
+//		assertEquals(1, getFacilityFacade().getActiveFacilitiesByDistrictAndType(new DistrictReferenceDto(d.getUuid()), false).size());
 	}
 
 	@Test

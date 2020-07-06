@@ -355,33 +355,33 @@ public class ContactImporter extends DataImporter {
 					} else if (propertyType.isAssignableFrom(FacilityReferenceDto.class)) {
 						Pair<DistrictReferenceDto, CommunityReferenceDto> infrastructureData =
 							ImporterPersonHelper.getPersonDistrictAndCommunity(pd.getName(), person);
-						List<FacilityReferenceDto> facility = FacadeProvider.getFacilityFacade()
-							.getByName(entry, infrastructureData.getElement0(), infrastructureData.getElement1(), false);
-						if (facility.isEmpty()) {
-							if (infrastructureData.getElement1() != null) {
-								throw new ImportErrorException(
-									I18nProperties.getValidationError(
-										Validations.importEntryDoesNotExistDbOrCommunity,
-										entry,
-										buildEntityProperty(entryHeaderPath)));
-							} else {
-								throw new ImportErrorException(
-									I18nProperties.getValidationError(
-										Validations.importEntryDoesNotExistDbOrDistrict,
-										entry,
-										buildEntityProperty(entryHeaderPath)));
-							}
-						} else if (facility.size() > 1 && infrastructureData.getElement1() == null) {
-							throw new ImportErrorException(
-								I18nProperties
-									.getValidationError(Validations.importFacilityNotUniqueInDistrict, entry, buildEntityProperty(entryHeaderPath)));
-						} else if (facility.size() > 1 && infrastructureData.getElement1() != null) {
-							throw new ImportErrorException(
-								I18nProperties
-									.getValidationError(Validations.importFacilityNotUniqueInCommunity, entry, buildEntityProperty(entryHeaderPath)));
-						} else {
-							pd.getWriteMethod().invoke(currentElement, facility.get(0));
-						}
+//						List<FacilityReferenceDto> facility = FacadeProvider.getFacilityFacade()
+//							.getByNameAndType(entry, infrastructureData.getElement0(), infrastructureData.getElement1(), false);
+//						if (facility.isEmpty()) {
+//							if (infrastructureData.getElement1() != null) {
+//								throw new ImportErrorException(
+//									I18nProperties.getValidationError(
+//										Validations.importEntryDoesNotExistDbOrCommunity,
+//										entry,
+//										buildEntityProperty(entryHeaderPath)));
+//							} else {
+//								throw new ImportErrorException(
+//									I18nProperties.getValidationError(
+//										Validations.importEntryDoesNotExistDbOrDistrict,
+//										entry,
+//										buildEntityProperty(entryHeaderPath)));
+//							}
+//						} else if (facility.size() > 1 && infrastructureData.getElement1() == null) {
+//							throw new ImportErrorException(
+//								I18nProperties
+//									.getValidationError(Validations.importFacilityNotUniqueInDistrict, entry, buildEntityProperty(entryHeaderPath)));
+//						} else if (facility.size() > 1 && infrastructureData.getElement1() != null) {
+//							throw new ImportErrorException(
+//								I18nProperties
+//									.getValidationError(Validations.importFacilityNotUniqueInCommunity, entry, buildEntityProperty(entryHeaderPath)));
+//						} else {
+//							pd.getWriteMethod().invoke(currentElement, facility.get(0));
+//						}
 					} else {
 						throw new UnsupportedOperationException(
 							I18nProperties.getValidationError(Validations.importPropertyTypeNotAllowed, propertyType.getName()));
